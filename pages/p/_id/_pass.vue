@@ -12,10 +12,12 @@
 
 <script>
 export default {
-  data: function() {
-    return {
-      title: "Login"
-    };
+  validate({ params }) {
+    if (params.id == undefined || params.pass == undefined) {
+      return false;
+    } else {
+      return true;
+    }
   },
   computed: {
     message: function() {
