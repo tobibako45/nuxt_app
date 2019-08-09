@@ -7,8 +7,9 @@ const createStore = () => {
   return new Vuex.Store({
     state: function() {
       return {
-        message: "これはstoreからのmessage",
-        ore: "これはおれ"
+        message: "count number.",
+        ore: "これはおれ",
+        counter: 0
       };
     }
   });

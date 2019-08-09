@@ -5,6 +5,11 @@
     <p>{{$store.state.message}}</p>
     <p>{{$store.state.ore}}</p>
     <hr />
+
+    <div class="link" v-on:click="doAction">
+      <a>clicked: {{$store.state.counter}}</a>
+    </div>
+
     <router-link to="/other">Go to Other</router-link>
   </section>
 </template>
@@ -17,6 +22,12 @@ export default {
       mmessage: "this is message."
       // now: "wait..."
     };
+  },
+  methods: {
+    doAction: function() {
+      // counterの値が1増える
+      this.$store.state.counter++;
+    }
   }
 };
 </script>
@@ -40,5 +51,14 @@ pre {
 }
 hr {
   margin: 10px 0px;
+}
+
+a {
+  font-size: 16pt;
+}
+
+.link {
+  background-color: #def;
+  padding: 10px;
 }
 </style>
