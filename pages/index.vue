@@ -1,7 +1,9 @@
 <template>
   <section class="container">
     <h1>{{title}}</h1>
-    <p>{{message}}</p>
+    <p>{{mmessage}}</p>
+    <p>{{$store.state.message}}</p>
+    <p>{{$store.state.ore}}</p>
     <hr />
     <router-link to="/other">Go to Other</router-link>
   </section>
@@ -12,16 +14,9 @@ export default {
   data: function() {
     return {
       title: "Hello",
-      message: "this is message.",
-      now: "wait..."
+      mmessage: "this is message."
+      // now: "wait..."
     };
-  },
-  created: function() {
-    // JSのタイマー
-    setInterval(() => {
-      var d = new Date();
-      this.now = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-    }, 1000);
   }
 };
 </script>
