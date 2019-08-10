@@ -1,45 +1,35 @@
 // Vuexオブジェクトをインポート　これでVuexという名前でオブジェクトが作成される
 import Vuex from "vuex";
 
+// vuex-persistedstateから必要なオブジェクトをインポート
+// createPersistedStateはvuex-persistedstateに用意されているオブジェクトです
+import createPersistedState from "vuex-persistedstate";
+
 // createStoreという関数を定義　この中でVuex.Storeオブジェクトを作成し、returnしている
 // このVuex.Storeは「ストア」と呼ばれる、Vuexの情報をまとめて保管するオブジェクト
 const createStore = () => {
   return new Vuex.Store({
-    // ステート データを保管
     state: function() {
       return {
         message: "count number.",
-        ore: "これはおれ",
         counter: 0
       };
     },
-
-    // ミューテーションは、関数の定義として値が取り出される。引数は最低でも１つ用意されますが、
-    // これにはstateの値をまとめたオブジェクト($store.stateに相当するもの)が渡されます。
-    // このオブジェクトから必要な値を取り出し操作します。
-
-    // ミューテーション コンポーネント側でなくて、こっちでstateの値を操作する処理を用意する
     mutations: {
-      count: function(state, n) {
+      doit: function(state) {
+        var n = Math.floor(Math.random() * 10);
         state.counter += n;
-      },
-      say: function(state, msg) {
-        state.message = msg;
+        state.message = "add " + n + ".";
       },
       reset: function(state) {
         state.counter = 0;
-        state.message = "reset now...";
+        state.message = "reset now.";
       }
     },
-    actions: {
-      doit: function(context) {
-        var n = Math.floor(Math.random() * 10);
 
-        // ここで、countとsayを実行する
-        context.commit("count", n);
-        context.commit("say", "add " + n + "!");
-      }
-    }
+    // これによりstateが常に保持される。実際に組み込んでいる部分はこれ。
+    // プラグインを設定するためのもので、ここでcreatePersistedStateを追加している。
+    plugins: [createPersistedState()]
   });
 };
 

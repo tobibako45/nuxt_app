@@ -1,15 +1,11 @@
 <template>
   <section class="container">
     <h1>{{title}}</h1>
-    <p>{{mmessage}}</p>
+    <p>{{$store.state.message}}</p>
     <hr />
-
-    <!-- @click="$store.dispatch('doit')"が実行され、そこからcountとsayaミューテーションが呼び出される -->
-    <div class="link" @click="$store.dispatch('doit')">
+    <div class="link" @click="$store.commit('doit')">
       <a @click.stop="$store.commit('reset')">clicked: {{ $store.state.counter }}</a>
     </div>
-
-    <router-link to="/other">Go to Other</router-link>
   </section>
 </template>
 
