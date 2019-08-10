@@ -4,13 +4,9 @@
     <p>{{mmessage}}</p>
     <hr />
 
-    <!-- clickすると１増える。shift押しながらclickすると0に戻る -->
-    <div
-      class="link"
-      @click.exact="$store.commit({type: 'count', message: '5追加ね！', add: 5})"
-      @click.shift="$store.commit({type: 'count', message: '100追加ね！', add: 100})"
-    >
-      <a @click.stop="$store.commit('reset')">clicked: {{$store.state.counter}}</a>
+    <!-- @click="$store.dispatch('doit')"が実行され、そこからcountとsayaミューテーションが呼び出される -->
+    <div class="link" @click="$store.dispatch('doit')">
+      <a @click.stop="$store.commit('reset')">clicked: {{ $store.state.counter }}</a>
     </div>
 
     <router-link to="/other">Go to Other</router-link>

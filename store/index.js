@@ -20,13 +20,24 @@ const createStore = () => {
 
     // ミューテーション コンポーネント側でなくて、こっちでstateの値を操作する処理を用意する
     mutations: {
-      // 引数にオブジェクトを渡したい時
-      count: function(state, obj) {
-        state.message = obj.message;
-        state.counter += obj.add;
+      count: function(state, n) {
+        state.counter += n;
+      },
+      say: function(state, msg) {
+        state.message = msg;
       },
       reset: function(state) {
         state.counter = 0;
+        state.message = "reset now...";
+      }
+    },
+    actions: {
+      doit: function(context) {
+        var n = Math.floor(Math.random() * 10);
+
+        // ここで、countとsayを実行する
+        context.commit("count", n);
+        context.commit("say", "add " + n + "!");
       }
     }
   });
