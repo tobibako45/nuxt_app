@@ -5,8 +5,13 @@
     <hr />
 
     <!-- clickすると１増える。shift押しながらclickすると0に戻る -->
-    <div class="link" @click="$store.commit('count')" @click.shift="$store.commit('reset')">
-      <a>clicked: {{$store.state.counter}}</a>
+    <div
+      class="link"
+      @click.exact="$store.commit('count', 100)"
+      @click.shift="$store.commit('count', 50)"
+      @click.ctrl="$store.commit('count', 1)"
+    >
+      <a @click.stop="$store.commit('reset')">clicked: {{$store.state.counter}}</a>
     </div>
 
     <router-link to="/other">Go to Other</router-link>
