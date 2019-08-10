@@ -2,11 +2,10 @@
   <section class="container">
     <h1>{{title}}</h1>
     <p>{{mmessage}}</p>
-    <p>{{$store.state.message}}</p>
-    <p>{{$store.state.ore}}</p>
     <hr />
 
-    <div class="link" v-on:click="doAction">
+    <!-- clickすると１増える。shift押しながらclickすると0に戻る -->
+    <div class="link" @click="$store.commit('count')" @click.shift="$store.commit('reset')">
       <a>clicked: {{$store.state.counter}}</a>
     </div>
 
@@ -25,7 +24,7 @@ export default {
   },
   methods: {
     doAction: function() {
-      // counterの値が1増える
+      // $store.state.counterの値を直接書き換えて、counterの値が1増える
       this.$store.state.counter++;
     }
   }
