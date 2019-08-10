@@ -7,9 +7,8 @@
     <!-- clickすると１増える。shift押しながらclickすると0に戻る -->
     <div
       class="link"
-      @click.exact="$store.commit('count', 100)"
-      @click.shift="$store.commit('count', 50)"
-      @click.ctrl="$store.commit('count', 1)"
+      @click.exact="$store.commit({type: 'count', message: '5追加ね！', add: 5})"
+      @click.shift="$store.commit({type: 'count', message: '100追加ね！', add: 100})"
     >
       <a @click.stop="$store.commit('reset')">clicked: {{$store.state.counter}}</a>
     </div>

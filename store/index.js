@@ -20,9 +20,10 @@ const createStore = () => {
 
     // ミューテーション コンポーネント側でなくて、こっちでstateの値を操作する処理を用意する
     mutations: {
-      // 引数nを渡した場合。第一引数には必ずstateが渡されるので、これは削除しないように！
-      count: function(state, n) {
-        state.counter += n;
+      // 引数にオブジェクトを渡したい時
+      count: function(state, obj) {
+        state.message = obj.message;
+        state.counter += obj.add;
       },
       reset: function(state) {
         state.counter = 0;
