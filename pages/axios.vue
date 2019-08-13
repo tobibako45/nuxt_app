@@ -2,68 +2,57 @@
   <section class="container">
     <h1>{{title}}</h1>
     <p>{{message}}</p>
-    <div>
-      <!--      v-model="msgで、this.msgに保管-->
-      <input type="text" v-model="msg" />
-      <!-- @clickでdoClickを呼び出す-->
-      <button @click="doClick">Click</button>
-    </div>
+
+    <!-- 一覧 -->
+    <!-- <ul v-for="(data, key) in json_data">
+      <li>{{data.name}} {{data.tel}} {{data.age}} {{key}}</li>
+    </ul>-->
+
+    <!-- 詳細 -->
+    <input v-model="find" />
+    <button @click="getData">Click</button>
     <hr />
-    <table>
-      <tr>
-        <th>User ID</th>
-        <td>{{json_data.userId}}</td>
-      </tr>
-      <tr>
-        <th>ID</th>
-        <td>{{json_data.id}}</td>
-      </tr>
-      <tr>
-        <th>Title</th>
-        <td>{{json_data.title}}</td>
-      </tr>
-      <tr>
-        <th>Body</th>
-        <td>{{json_data.body}}</td>
-      </tr>
-    </table>
+    <ul>
+      <li>{{json_data}}</li>
+    </ul>
   </section>
 </template>
 
 <script>
 const axios = require("axios");
-// 一覧のURL
-let url = "https://jsonplaceholder.typicode.com/posts/";
+// 一覧
+// let url = "https://my-project-1541485512930.firebaseio.com/person.json";
+
+// 詳細
+// let url ="https://my-project-1541485512930.firebaseio.com/person/shogo@maeshiro.json";
+let url = "https://my-project-1541485512930.firebaseio.com/person/";
 
 export default {
   data: function() {
     return {
       title: "Axios",
-      message: "axios sample",
-      msg: "",
+      find: "",
+      message: "axios sample.",
       json_data: {}
     };
   },
-  // async asyncData() {
-  //     let id = 10; // id番号
-  //     // await axios.getで、サイトの"https://jsonplaceholder.typicode.com/posts/10"とかにアクセスしてresultに代入。
-  //     let result = await axios.get(url + id);
-  //     // result.dataに、オブジェクトとしてマージされている。json_dataに入れてそのまま使える。
-  //     return {json_data: result.data};
+  // 一覧 アクセスはasyncDataに用意してある。
+  // asyncData: async function() {
+  //
+  //   let result = await axios.get(url);
+  //   return { json_data: result.data };
   // }
-
   methods: {
-    doClick: function(event) {
-      // v-modelで保管されたmsgをthis.msgで取り出して、変数urlにくっつけてアクセスしている。
+    getData: function() {
+      let id_url = url + this.find + ".json";
       axios
-        .get(url + this.msg)
+        .get(id_url)
         .then(res => {
-          this.message = "get ID=" + this.msg;
-          // then内のアロー関数で、引数のresからdataを取り出し、this.json_dataに設定している
+          this.message = "get ID=" + this.find;
           this.json_data = res.data;
         })
         .catch(error => {
-          this.message = "Error!";
+          this.message = "ERROR!";
           this.json_data = {};
         });
     }
@@ -111,5 +100,13 @@ input {
 }
 button {
   font-size: 14pt;
+}
+ul {
+  margin: 0px 10px;
+  background-color: aliceblue;
+}
+li {
+  padding: 10px;
+  font-size: 16pt;
 }
 </style>
