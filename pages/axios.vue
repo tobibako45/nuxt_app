@@ -5,6 +5,42 @@
     <input v-model="find" />
     <button @click="getData">Click</button>
     <hr />
+
+    <table>
+      <tr>
+        <th>Email</th>
+        <td>
+          <input v-model="email" />
+        </td>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <td>
+          <input v-model="username" />
+        </td>
+      </tr>
+      <tr>
+        <th>Tel</th>
+        <td>
+          <input v-model="tel" />
+        </td>
+      </tr>
+      <tr>
+        <th>age</th>
+        <td>
+          <input v-model="age" />
+        </td>
+      </tr>
+      <tr>
+        <th></th>
+        <td>
+          <button @click="addData">Click</button>
+        </td>
+      </tr>
+    </table>
+
+    <hr />
+
     <ul v-for="(data, key) in json_data">
       <li>
         <strong>{{key}}</strong>
@@ -18,16 +54,7 @@
 
 <script>
 const axios = require("axios");
-// 一覧
-// let url = "https://my-project-1541485512930.firebaseio.com/person.json";
-
-// 詳細
-// let url ="https://my-project-1541485512930.firebaseio.com/person/shogo@maeshiro.json";
-// let url = "https://my-project-1541485512930.firebaseio.com/person/";
-
-// インデックスによる検索
-let url =
-  "https://my-project-1541485512930.firebaseio.com/person.json?orderBy=%22age%22";
+let url = "https://my-project-1541485512930.firebaseio.com/person";
 
 export default {
   data: function() {
@@ -35,27 +62,42 @@ export default {
       title: "Axios",
       message: "axios sample.",
       find: "",
+      email: "",
+      tel: "",
+      age: 0,
       json_data: {}
     };
   },
-  // 一覧 アクセスはasyncDataに用意してある。
-  // asyncData: async function() {
-  //
-  //   let result = await axios.get(url);
-  //   return { json_data: result.data };
-  // }
   methods: {
-    getData: function() {
-      let range = this.find.split(",");
-      let age_url = url + "&startAt=" + range[0] + "&endAt=" + range[1];
+    addData: function() {
+      // 追加するためのアドレス   https://プロジェクト名.firebaseio.com/person/キー.json
+      let add_url = url + "/" + this.email + ".json";
 
+      let data = {
+        name: this.username,
+        age: this.age,
+        tel: this.tel
+      };
+
+      // POST通信
+      axios.put(add_url, data).then(responce => {
+        // putに成功したら、各データを初期状態にもどして、
+        this.email = "";
+        this.username = "";
+        this.age = 0;
+        this.tel = "";
+        // 一覧を表示する
+        this.getData();
+      });
+    },
+    getData: function() {
       // GET通信
       axios
-        .get(age_url)
+        .get(url + ".json")
         // thenで成功した場合の処理をかける
         .then(response => {
-          this.message = "get: " + range[0] + " < age < " + range[1];
-          this.json_data = response.data;
+          this.message = "get All Data";
+          this.json_data = response.data; // responseの中のdataに検索したデータが入ってる
         })
         // catchでエラー時の挙動を定義する
         .catch(error => {
@@ -64,6 +106,11 @@ export default {
           this.json_data = {};
         });
     }
+  },
+  // createdフックはインスタンスが生成された後にコードを実行したいときに使われます。
+  created: function() {
+    // これで初期画面に一覧を出してる
+    this.getData();
   }
 };
 </script>
