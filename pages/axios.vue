@@ -12,29 +12,8 @@
         <td>
           <input v-model="email" />
         </td>
-      </tr>
-      <tr>
-        <th>Name</th>
         <td>
-          <input v-model="username" />
-        </td>
-      </tr>
-      <tr>
-        <th>Tel</th>
-        <td>
-          <input v-model="tel" />
-        </td>
-      </tr>
-      <tr>
-        <th>age</th>
-        <td>
-          <input v-model="age" />
-        </td>
-      </tr>
-      <tr>
-        <th></th>
-        <td>
-          <button @click="addData">Click</button>
+          <button @click="delData">Click</button>
         </td>
       </tr>
     </table>
@@ -61,32 +40,18 @@ export default {
     return {
       title: "Axios",
       message: "axios sample.",
-      find: "",
       email: "",
-      tel: "",
-      age: 0,
       json_data: {}
     };
   },
   methods: {
-    addData: function() {
-      // 追加するためのアドレス   https://プロジェクト名.firebaseio.com/person/キー.json
-      let add_url = url + "/" + this.email + ".json";
+    delData: function() {
+      // 削除するためのアドレス  https://プロジェクト名.firebaseio.com/person/キー.json
+      let del_url = url + "/" + this.email + ".json";
 
-      let data = {
-        name: this.username,
-        age: this.age,
-        tel: this.tel
-      };
-
-      // POST通信
-      axios.put(add_url, data).then(responce => {
-        // putに成功したら、各データを初期状態にもどして、
+      axios.delete(del_url).then(response => {
+        this.message = this.email + "を削除しました。";
         this.email = "";
-        this.username = "";
-        this.age = 0;
-        this.tel = "";
-        // 一覧を表示する
         this.getData();
       });
     },
