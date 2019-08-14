@@ -25,7 +25,11 @@ const axios = require("axios");
 
 // 詳細
 // let url ="https://my-project-1541485512930.firebaseio.com/person/shogo@maeshiro.json";
-let url = "https://my-project-1541485512930.firebaseio.com/person/";
+// let url = "https://my-project-1541485512930.firebaseio.com/person/";
+
+// インデックスによる検索
+let url =
+  "https://my-project-1541485512930.firebaseio.com/person.json?orderBy=%22$key%22&equalTo=%22";
 
 export default {
   data: function() {
@@ -44,7 +48,7 @@ export default {
   // }
   methods: {
     getData: function() {
-      let id_url = url + this.find + ".json";
+      let id_url = url + this.find + "%22";
       axios
         .get(id_url)
         .then(res => {
