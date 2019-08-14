@@ -2,21 +2,19 @@
   <section class="container">
     <h1>{{title}}</h1>
     <p>{{message}}</p>
-
-    <!-- 一覧 -->
-    <!-- <ul v-for="(data, key) in json_data">
-      <li>{{data.name}} {{data.tel}} {{data.age}} {{key}}</li>
-    </ul>-->
-
-    <!-- 詳細 -->
     <input v-model="find" />
     <button @click="getData">Click</button>
     <hr />
-    <ul>
-      <li>{{json_data}}</li>
+    <ul v-for="(data, key) in json_data">
+      <li>
+        <strong>{{key}}</strong>
+        <br />
+        {{data}}
+      </li>
     </ul>
   </section>
 </template>
+
 
 <script>
 const axios = require("axios");
@@ -29,14 +27,14 @@ const axios = require("axios");
 
 // インデックスによる検索
 let url =
-  "https://my-project-1541485512930.firebaseio.com/person.json?orderBy=%22$key%22&equalTo=%22";
+  "https://my-project-1541485512930.firebaseio.com/person.json?orderBy=%22age%22";
 
 export default {
   data: function() {
     return {
       title: "Axios",
-      find: "",
       message: "axios sample.",
+      find: "",
       json_data: {}
     };
   },
@@ -48,15 +46,21 @@ export default {
   // }
   methods: {
     getData: function() {
-      let id_url = url + this.find + "%22";
+      let range = this.find.split(",");
+      let age_url = url + "&startAt=" + range[0] + "&endAt=" + range[1];
+
+      // GET通信
       axios
-        .get(id_url)
-        .then(res => {
-          this.message = "get ID=" + this.find;
-          this.json_data = res.data;
+        .get(age_url)
+        // thenで成功した場合の処理をかける
+        .then(response => {
+          this.message = "get: " + range[0] + " < age < " + range[1];
+          this.json_data = response.data;
         })
+        // catchでエラー時の挙動を定義する
         .catch(error => {
           this.message = "ERROR!";
+          // json_dataに空のオブジェクトを代入
           this.json_data = {};
         });
     }
