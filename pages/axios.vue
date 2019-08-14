@@ -8,6 +8,8 @@
 
 
 <script>
+// firebaseをインポート  Firebaseパッケージから、アクセスのためのオブジェクトをインポート
+// これでfirebaseオブジェクトが使えるようになる
 import firebase from "firebase";
 
 export default {
@@ -18,7 +20,9 @@ export default {
     };
   },
   created: function() {
-    // 各自設定
+    // 設定を記述
+    // アプリを作ったときにコピーしたスクリプトの設定情報を記入
+    // APIキーとかは.envで管理 呼び出すときは「process.env.◯◯」
     var config = {
       apiKey: process.env.API_KEY,
       authDomain: process.env.PROJECT_ID + ".firebaseapp.com",
@@ -29,13 +33,29 @@ export default {
       appId: "1:851472385234:web:cb2878e9b9d08036"
     };
 
+    // Firebaseを初期化  設定情報を渡して初期化する
     firebase.initializeApp(config);
 
+    // AuthProviderの作成  firebaseからGoolgeAuthProviderオブジェクトを作成する
+    // これはOAuthと呼ばれるものの１つで、認証の処理を行うための機能を提供するもの。
+    // GoolgeAuthProviderは、Googleアカウントによる認証のための機能を提供する
     var provider = new firebase.auth.GoogleAuthProvider();
+
+    // thisを変数selfに代入してから、
     var self = this;
+
+    // firebase.authで、認証のためのオブジェクトを取り出す。
+    // signInWithPopupは、ボップアップウィンドウを開いてGoogle認証を行うためのもの。
+    // これは非同期で実行されます。
+    // 現れたウィンドウでユーザーが認証を行うと、その後のthenに用意した関数が実行される。
     firebase
       .auth()
+      // signInWithPopupを呼び出す。
       .signInWithPopup(provider)
+      // thenの関数で、messageにログインしたユーザー名やメールアドレスといった情報を表示している
+      // ログインしたユーザー情報は、result.userで得ることができる
+      // この値はオブジェクトになっており、「user」という値に認証したユーザーに関する値が用意されます。
+      // このresult.userの中に、認証したユーザーに関する情報が入ってる
       .then(function(result) {
         self.message = result.user.displayName + ", " + result.user.email;
       });
