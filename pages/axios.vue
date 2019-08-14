@@ -2,80 +2,43 @@
   <section class="container">
     <h1>{{title}}</h1>
     <p>{{message}}</p>
-    <input v-model="find" />
-    <button @click="getData">Click</button>
     <hr />
-
-    <table>
-      <tr>
-        <th>Email</th>
-        <td>
-          <input v-model="email" />
-        </td>
-        <td>
-          <button @click="delData">Click</button>
-        </td>
-      </tr>
-    </table>
-
-    <hr />
-
-    <ul v-for="(data, key) in json_data">
-      <li>
-        <strong>{{key}}</strong>
-        <br />
-        {{data}}
-      </li>
-    </ul>
   </section>
 </template>
 
 
 <script>
-const axios = require("axios");
-let url = "https://my-project-1541485512930.firebaseio.com/person";
+import firebase from "firebase";
 
 export default {
   data: function() {
     return {
-      title: "Axios",
-      message: "axios sample.",
-      email: "",
-      json_data: {}
+      title: "Auth",
+      message: "this is message"
     };
   },
-  methods: {
-    delData: function() {
-      // 削除するためのアドレス  https://プロジェクト名.firebaseio.com/person/キー.json
-      let del_url = url + "/" + this.email + ".json";
-
-      axios.delete(del_url).then(response => {
-        this.message = this.email + "を削除しました。";
-        this.email = "";
-        this.getData();
-      });
-    },
-    getData: function() {
-      // GET通信
-      axios
-        .get(url + ".json")
-        // thenで成功した場合の処理をかける
-        .then(response => {
-          this.message = "get All Data";
-          this.json_data = response.data; // responseの中のdataに検索したデータが入ってる
-        })
-        // catchでエラー時の挙動を定義する
-        .catch(error => {
-          this.message = "ERROR!";
-          // json_dataに空のオブジェクトを代入
-          this.json_data = {};
-        });
-    }
-  },
-  // createdフックはインスタンスが生成された後にコードを実行したいときに使われます。
   created: function() {
-    // これで初期画面に一覧を出してる
-    this.getData();
+    // 各自設定
+    var config = {
+      apiKey: process.env.API_KEY,
+      authDomain: process.env.PROJECT_ID + ".firebaseapp.com",
+      databaseURL: "https://" + process.env.PROJECT_ID + ".firebaseio.com",
+      projectId: process.env.PROJECT_ID,
+      storageBucket: "",
+      messagingSenderId: "851472385234",
+      appId: "1:851472385234:web:cb2878e9b9d08036"
+    };
+
+    firebase.initializeApp(config);
+
+    var provider = new firebase.auth.GoogleAuthProvider();
+    var self = this;
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(function(result) {
+        self.message = result.user.displayName + ", " + result.user.email;
+      });
   }
 };
 </script>
